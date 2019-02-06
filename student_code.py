@@ -142,6 +142,89 @@ class KnowledgeBase(object):
         """
         ####################################################
         # Student code goes here
+        return_string = ""
+        counter = 0
+        if isinstance(fact_or_rule, Fact):
+            if fact_or_rule in self.facts:
+                fact = self._get_fact(fact_or_rule)
+                return_string = return_string + "fact: " + fact.statement.__str__()
+
+                return_string += self.kb_supports(fact, counter)
+
+            else:
+                return_string = return_string + "Fact is not in the KB"
+
+        if isinstance(fact_or_rule, Rule):
+            if fact_or_rule in self.rules:
+                rule = self._get_rule(fact_or_rule)
+                lhsstring = self.kb_print_rule(rule.lhs)
+                return_string = return_string + "rule: " + lhsstring + "->" + rule.rhs
+
+                return_string += self.kb_supports(rule, counter)
+
+            else:
+                return_string = return_string + "Rule is not in the KB"
+
+        return return_string
+
+    def kb_supports(self, f_or_r, counter):
+        counter += 1
+        rs = ""
+        if isinstance(f_or_r, Fact):
+            fact = self._get_fact(f_or_r)
+            if fact.supported_by:
+                for sb in fact.supported_by:
+                    rs = rs + "\n  SUPPORTED BY"
+                    sup_fact = sb[0]
+                    sup_rule = sb[1]
+
+                    rs = rs + "\n     fact: " + sup_fact.statement.__str__()
+                    if sup_fact.asserted is True:
+                        rs = rs + " ASSERTED"
+                    else:
+                        rs += self.kb_supports(sup_fact, counter)
+
+                    lhsstring = self.kb_print_rule(sup_rule.lhs)
+                    rs = rs + "\n     rule: " + lhsstring + "->" + sup_rule.rhs.__str__()
+                    if sup_rule.asserted is True:
+                        rs = rs + " ASSERTED"
+                    else:
+                        rs += self.kb_supports(sup_rule, counter)
+
+
+        if isinstance(f_or_r, Rule):
+            rule = self._get_rule(f_or_r)
+            if rule.supported_by:
+
+                for sb in rule.supported_by:
+                    rs = rs + "\n  SUPPORTED BY"
+                    sup_fact = sb[0]
+                    sup_rule = sb[1]
+
+                    rs = rs + "\n     fact: " + sup_fact.statement.__str__()
+                    if sup_fact.asserted is True:
+                        rs = rs + " ASSERTED"
+                    else:
+                        rs += self.kb_supports(sup_fact, counter)
+
+                    lhsstring = self.kb_print_rule(sup_rule.lhs)
+                    rs = rs + "\n     rule: " + lhsstring + "->" + sup_rule.rhs.__str__()
+                    if sup_rule.asserted is True:
+                        rs = rs + " ASSERTED"
+                    else:
+                        rs += self.kb_supports(sup_rule, counter)
+
+        return rs
+
+    def kb_print_rule(self, rule_lhs):
+        lhs_string = "("
+        for i in rule_lhs:
+            lhs_string += i.__str__() +", "
+        lhs_string = lhs_string.strip(", ")
+        lhs_string += ")"
+
+        return lhs_string
+
 
 
 class InferenceEngine(object):
