@@ -84,7 +84,6 @@ fact: (eats nyala leaves)\n\
         rule: ((eats ?x plantBasedFood), (isa ?y plantBasedFood)) -> (eats ?x ?y) ASSERTED\
 '
         actual = self.KB.kb_explain(read.parse_input("fact: (eats nyala leaves)"))
-        print(actual)
         self.compare(self.expected, actual)
 
 
