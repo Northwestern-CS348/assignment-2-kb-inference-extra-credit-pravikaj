@@ -148,6 +148,10 @@ class KnowledgeBase(object):
             if fact_or_rule in self.facts:
                 fact = self._get_fact(fact_or_rule)
                 return_string = return_string + "fact: " + fact.statement.__str__()
+                if fact.asserted is True:
+                    return_string = return_string + " ASSERTED\n"
+                else:
+                    return_string += "\n"
 
                 return_string += self.kb_supports(fact, counter)
 
@@ -158,7 +162,12 @@ class KnowledgeBase(object):
             if fact_or_rule in self.rules:
                 rule = self._get_rule(fact_or_rule)
                 lhsstring = self.kb_print_rule(rule.lhs)
-                return_string = return_string + "rule: " + lhsstring + "->" + rule.rhs
+                return_string = return_string + "rule: " + lhsstring + " -> " + rule.rhs
+
+                if rule.asserted is True:
+                    return_string = return_string + " ASSERTED\n"
+                else:
+                    return_string += "\n"
 
                 return_string += self.kb_supports(rule, counter)
 
@@ -168,28 +177,33 @@ class KnowledgeBase(object):
         return return_string
 
     def kb_supports(self, f_or_r, counter):
-        counter += 1
+        # counter += 1
+        spaces = " "*counter*4;
         rs = ""
         if isinstance(f_or_r, Fact):
             fact = self._get_fact(f_or_r)
             if fact.supported_by:
                 for sb in fact.supported_by:
-                    rs = rs + "\n  SUPPORTED BY"
+                    rs = rs + spaces + "  SUPPORTED BY \n"
                     sup_fact = sb[0]
                     sup_rule = sb[1]
 
-                    rs = rs + "\n     fact: " + sup_fact.statement.__str__()
+                    rs = rs + spaces + "    fact: " + sup_fact.statement.__str__()
                     if sup_fact.asserted is True:
-                        rs = rs + " ASSERTED"
+                        rs = rs + " ASSERTED \n"
                     else:
-                        rs += self.kb_supports(sup_fact, counter)
+                        rs += "\n"
+                        new_counter = counter + 1
+                        rs += self.kb_supports(sup_fact, new_counter)
 
                     lhsstring = self.kb_print_rule(sup_rule.lhs)
-                    rs = rs + "\n     rule: " + lhsstring + "->" + sup_rule.rhs.__str__()
+                    rs = rs + spaces + "    rule: " + lhsstring + " -> " + sup_rule.rhs.__str__()
                     if sup_rule.asserted is True:
-                        rs = rs + " ASSERTED"
+                        rs = rs + " ASSERTED \n"
                     else:
-                        rs += self.kb_supports(sup_rule, counter)
+                        rs += "\n"
+                        new_counter = counter + 1
+                        rs += self.kb_supports(sup_rule, new_counter)
 
 
         if isinstance(f_or_r, Rule):
@@ -197,22 +211,26 @@ class KnowledgeBase(object):
             if rule.supported_by:
 
                 for sb in rule.supported_by:
-                    rs = rs + "\n  SUPPORTED BY"
+                    rs = rs + spaces + "  SUPPORTED BY \n"
                     sup_fact = sb[0]
                     sup_rule = sb[1]
 
-                    rs = rs + "\n     fact: " + sup_fact.statement.__str__()
+                    rs = rs + spaces + "    fact: " + sup_fact.statement.__str__()
                     if sup_fact.asserted is True:
-                        rs = rs + " ASSERTED"
+                        rs = rs + " ASSERTED \n"
                     else:
-                        rs += self.kb_supports(sup_fact, counter)
+                        rs += "\n"
+                        new_counter = counter + 1
+                        rs += self.kb_supports(sup_fact, new_counter)
 
                     lhsstring = self.kb_print_rule(sup_rule.lhs)
-                    rs = rs + "\n     rule: " + lhsstring + "->" + sup_rule.rhs.__str__()
+                    rs = rs + spaces + "    rule: " + lhsstring + " -> " + sup_rule.rhs.__str__()
                     if sup_rule.asserted is True:
-                        rs = rs + " ASSERTED"
+                        rs = rs + " ASSERTED \n"
                     else:
-                        rs += self.kb_supports(sup_rule, counter)
+                        rs += "\n"
+                        new_counter = counter + 1
+                        rs += self.kb_supports(sup_rule, new_counter)
 
         return rs
 
