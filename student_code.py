@@ -193,8 +193,8 @@ class KnowledgeBase(object):
                         rs = rs + " ASSERTED \n"
                     else:
                         rs += "\n"
-                        new_counter = counter + 1
-                        rs += self.kb_supports(sup_fact, new_counter)
+                    new_counter = counter + 1
+                    rs += self.kb_supports(sup_fact, new_counter)
 
                     lhsstring = self.kb_print_rule(sup_rule.lhs)
                     rs = rs + spaces + "    rule: " + lhsstring + " -> " + sup_rule.rhs.__str__()
@@ -202,8 +202,8 @@ class KnowledgeBase(object):
                         rs = rs + " ASSERTED \n"
                     else:
                         rs += "\n"
-                        new_counter = counter + 1
-                        rs += self.kb_supports(sup_rule, new_counter)
+                    new_counter = counter + 1
+                    rs += self.kb_supports(sup_rule, new_counter)
 
 
         if isinstance(f_or_r, Rule):
@@ -220,8 +220,8 @@ class KnowledgeBase(object):
                         rs = rs + " ASSERTED \n"
                     else:
                         rs += "\n"
-                        new_counter = counter + 1
-                        rs += self.kb_supports(sup_fact, new_counter)
+                    new_counter = counter + 1
+                    rs += self.kb_supports(sup_fact, new_counter)
 
                     lhsstring = self.kb_print_rule(sup_rule.lhs)
                     rs = rs + spaces + "    rule: " + lhsstring + " -> " + sup_rule.rhs.__str__()
@@ -229,8 +229,8 @@ class KnowledgeBase(object):
                         rs = rs + " ASSERTED \n"
                     else:
                         rs += "\n"
-                        new_counter = counter + 1
-                        rs += self.kb_supports(sup_rule, new_counter)
+                    new_counter = counter + 1
+                    rs += self.kb_supports(sup_rule, new_counter)
 
         return rs
 
