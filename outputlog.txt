@@ -4,9 +4,14 @@ TESTS FAILED
 test03 (gradingtests.UnitTests)
 Traceback (most recent call last):
   File "/Users/k2i/academics/automatedgradingapp/app/testing/kb-inference-ec/gradingtests.py", line 73, in test03
-    self.assertEqual(self.KB.kb_explain(fact4), answer1)
-AssertionError: 'fact[24 chars]ED BY \n    fact: (bigger A B) ASSERTED \n    [277 chars]D \n' != 'fact[24 chars]ED BY\n    fact: (bigger A B) ASSERTED\n    ru[270 chars]ED\n'
-Diff is 915 characters long. Set self.maxDiff to None to see it.
+    self.compare(self.KB.kb_explain(fact4), answer1)
+  File "/Users/k2i/academics/automatedgradingapp/app/testing/kb-inference-ec/gradingtests.py", line 18, in compare
+    '"{0}" ({1} lead spaces)'.format(a, len(a) - len(a.strip())))
+AssertionError: '"  SUPPORTED BY " (2 lead spaces)' != '"  SUPPORTED BY" (2 lead spaces)'
+- "  SUPPORTED BY " (2 lead spaces)
+?                -
++ "  SUPPORTED BY" (2 lead spaces)
+
 
 -------------------------------
 TESTS SKIPPED 
