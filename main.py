@@ -148,6 +148,41 @@ rule: ((eats so many nyala leaves)) -> (eats few) ASSERTED\n\
         actual = self.KB.kb_explain(read.parse_input("rule: ((eats so many nyala leaves)) -> (eats few)"))
         self.compare(self.expected, actual)
 
+    def test04(self):
+        f0 = read.parse_input("fact: (bottom B)")
+        f1 = read.parse_input("fact: (on A B)")
+        f2 = read.parse_input("fact: (bigger B A)")
+
+        r1 = read.parse_input("rule: ((on ?x ?y)) -> (bottom ?y)")
+        r2 = read.parse_input("rule: ((bigger ?x ?y)) -> (on ?y ?x)")
+
+        # first set of support
+        f0.supported_by.append([f1, r1])
+        f1.supported_by.append([f2, r2])
+
+        #  assertions
+        f2.asserted = True
+        r1.asserted = True
+        r2.asserted = True
+
+        f0.asserted = False
+        f1.asserted = False
+
+        self.KB.facts.extend([f0, f1, f2])
+        self.KB.rules.extend([r1, r2])
+
+        self.expected = '\
+fact: (bottom B)\n\
+  SUPPORTED BY\n\
+    fact: (on A B)\n\
+      SUPPORTED BY\n\
+        fact: (bigger B A) ASSERTED\n\
+        rule: ((bigger ?x ?y)) -> (on ?y ?x) ASSERTED\n\
+    rule: ((on ?x ?y)) -> (bottom ?y) ASSERTED\
+'
+        actual = self.KB.kb_explain(read.parse_input("fact: (bottom B)"))
+        self.compare(self.expected, actual)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -189,13 +189,14 @@ class KnowledgeBase(object):
                     rs += " ASSERTED"
                 rs += "\n"
 
+                new_counter = counter + 1
+                rs += self.kb_supports(sup_fact, new_counter)
+
                 rs += spaces + "    " + self.kb_print_rule(sup_rule)
                 if sup_rule.asserted:
                     rs += " ASSERTED"
                 rs += "\n"
 
-                new_counter = counter + 1
-                rs += self.kb_supports(sup_fact, new_counter)
                 rs += self.kb_supports(sup_rule, new_counter)
         return rs
 
