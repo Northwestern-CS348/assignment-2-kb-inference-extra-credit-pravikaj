@@ -145,10 +145,10 @@ class KnowledgeBase(object):
         return_string = ""  # output string that will be returned in the end
         counter = 0  # keeps track of recursion. Will help in spacing
         if isinstance(fact_or_rule, Fact):  # checks if it is a fact
-            if fact_or_rule in self.facts:  # checks if fact is in kb
-                fact = self._get_fact(fact_or_rule)
-                return_string = return_string + "fact: " + fact.statement.__str__()
-                if fact.asserted is True:  # checks if fact is asserted
+            fact = self._get_fact(fact_or_rule)
+            if fact in self.facts:  # checks if fact is in kb
+                return_string = "fact: " + fact.statement.__str__()
+                if fact.asserted:  # checks if fact is asserted
                     return_string = return_string + " ASSERTED\n"
                 else:
                     return_string += "\n"
@@ -158,13 +158,13 @@ class KnowledgeBase(object):
             else:
                 return_string = return_string + "Fact is not in the KB"
 
-        if isinstance(fact_or_rule, Rule):  # check if it is a rule
-            if fact_or_rule in self.rules:  # checks if a rule is in kb
-                rule = self._get_rule(fact_or_rule)
+        elif isinstance(fact_or_rule, Rule):  # check if it is a rule
+            rule = self._get_rule(fact_or_rule)
+            if rule in self.rules:  # checks if a rule is in kb
                 lhsstring = self.kb_print_rule(rule.lhs)  # converts left hand side to proper string format
                 return_string = return_string + "rule: " + lhsstring + " -> " + rule.rhs  # concatenates return string
 
-                if rule.asserted is True:
+                if rule.asserted:
                     return_string = return_string + " ASSERTED\n"
                 else:
                     return_string += "\n"
@@ -184,7 +184,7 @@ class KnowledgeBase(object):
             fact = self._get_fact(f_or_r)
             if fact.supported_by:
                 for sb in fact.supported_by:
-                    rs = rs + spaces + "  SUPPORTED BY \n"
+                    rs = rs + spaces + "  SUPPORTED BY\n"
                     sup_fact = sb[0]
                     sup_rule = sb[1]
 
@@ -237,7 +237,8 @@ class KnowledgeBase(object):
     def kb_print_rule(self, rule_lhs):
         lhs_string = "("
         for i in rule_lhs:
-            lhs_string += i.__str__() +", "
+
+            lhs_string += i.__str__() + ", "
         lhs_string = lhs_string.strip(", ")
         lhs_string += ")"
 
