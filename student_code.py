@@ -142,13 +142,13 @@ class KnowledgeBase(object):
         """
         ####################################################
         # Student code goes here
-        return_string = ""
-        counter = 0
-        if isinstance(fact_or_rule, Fact):
-            if fact_or_rule in self.facts:
+        return_string = ""  # output string that will be returned in the end
+        counter = 0  # keeps track of recursion. Will help in spacing
+        if isinstance(fact_or_rule, Fact):  # checks if it is a fact
+            if fact_or_rule in self.facts:  # checks if fact is in kb
                 fact = self._get_fact(fact_or_rule)
                 return_string = return_string + "fact: " + fact.statement.__str__()
-                if fact.asserted is True:
+                if fact.asserted is True:  # checks if fact is asserted
                     return_string = return_string + " ASSERTED\n"
                 else:
                     return_string += "\n"
@@ -158,11 +158,12 @@ class KnowledgeBase(object):
             else:
                 return_string = return_string + "Fact is not in the KB"
 
-        if isinstance(fact_or_rule, Rule):
-            if fact_or_rule in self.rules:
+        if isinstance(fact_or_rule, Rule):  # check if it is a rule
+            if fact_or_rule in self.rules:  # checks if a rule is in kb
                 rule = self._get_rule(fact_or_rule)
                 lhsstring = self.kb_print_rule(rule.lhs)
-                return_string = return_string + "rule: " + lhsstring + " -> " + rule.rhs
+                lhsstring = self.kb_print_rule(rule.lhs)  # converts left hand side to proper string format
+                return_string = return_string + "rule: " + lhsstring + " -> " + rule.rhs  # concatenates return string
 
                 if rule.asserted is True:
                     return_string = return_string + " ASSERTED\n"
