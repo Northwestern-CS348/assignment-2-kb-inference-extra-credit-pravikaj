@@ -161,7 +161,6 @@ class KnowledgeBase(object):
         if isinstance(fact_or_rule, Rule):  # check if it is a rule
             if fact_or_rule in self.rules:  # checks if a rule is in kb
                 rule = self._get_rule(fact_or_rule)
-                lhsstring = self.kb_print_rule(rule.lhs)
                 lhsstring = self.kb_print_rule(rule.lhs)  # converts left hand side to proper string format
                 return_string = return_string + "rule: " + lhsstring + " -> " + rule.rhs  # concatenates return string
 
