@@ -149,9 +149,8 @@ class KnowledgeBase(object):
             if fact in self.facts:  # checks if fact is in kb
                 return_string = "fact: " + fact.statement.__str__()
                 if fact.asserted:  # checks if fact is asserted
-                    return_string = return_string + " ASSERTED\n"
-                else:
-                    return_string += "\n"
+                    return_string = return_string + " ASSERTED"
+                return_string += "\n"
 
                 return_string += self.kb_supports(fact, counter)
 
@@ -161,13 +160,11 @@ class KnowledgeBase(object):
         elif isinstance(fact_or_rule, Rule):  # check if it is a rule
             rule = self._get_rule(fact_or_rule)
             if rule in self.rules:  # checks if a rule is in kb
-                lhsstring = self.kb_print_rule(rule.lhs)  # converts left hand side to proper string format
-                return_string = return_string + "rule: " + lhsstring + " -> " + rule.rhs  # concatenates return string
+                return_string = return_string + self.kb_print_rule(rule)
 
                 if rule.asserted:
-                    return_string = return_string + " ASSERTED\n"
-                else:
-                    return_string += "\n"
+                    return_string = return_string + " ASSERTED"
+                return_string += "\n"
 
                 return_string += self.kb_supports(rule, counter)
 
@@ -176,72 +173,39 @@ class KnowledgeBase(object):
 
         return return_string
 
+
     def kb_supports(self, f_or_r, counter):
-        # counter += 1
-        spaces = " "*counter*4;
+        spaces = " " * counter * 4;
         rs = ""
-        if isinstance(f_or_r, Fact):
-            fact = self._get_fact(f_or_r)
-            if fact.supported_by:
-                for sb in fact.supported_by:
-                    rs = rs + spaces + "  SUPPORTED BY\n"
-                    sup_fact = sb[0]
-                    sup_rule = sb[1]
+        sup_length = len(f_or_r.supported_by)
+        if sup_length != 0:
+            for sb in f_or_r.supported_by:
+                rs = rs + spaces + "  SUPPORTED BY\n"
+                sup_fact = sb[0]
+                sup_rule = sb[1]
 
-                    rs = rs + spaces + "    fact: " + sup_fact.statement.__str__()
-                    if sup_fact.asserted is True:
-                        rs = rs + " ASSERTED \n"
-                    else:
-                        rs += "\n"
-                    new_counter = counter + 1
-                    rs += self.kb_supports(sup_fact, new_counter)
+                rs += spaces + "    fact: " + sup_fact.statement.__str__()
+                if sup_fact.asserted:
+                    rs += " ASSERTED"
+                rs += "\n"
 
-                    lhsstring = self.kb_print_rule(sup_rule.lhs)
-                    rs = rs + spaces + "    rule: " + lhsstring + " -> " + sup_rule.rhs.__str__()
-                    if sup_rule.asserted is True:
-                        rs = rs + " ASSERTED \n"
-                    else:
-                        rs += "\n"
-                    new_counter = counter + 1
-                    rs += self.kb_supports(sup_rule, new_counter)
+                rs += spaces + "    " + self.kb_print_rule(sup_rule)
+                if sup_rule.asserted:
+                    rs += " ASSERTED"
+                rs += "\n"
 
-
-        if isinstance(f_or_r, Rule):
-            rule = self._get_rule(f_or_r)
-            if rule.supported_by:
-
-                for sb in rule.supported_by:
-                    rs = rs + spaces + "  SUPPORTED BY \n"
-                    sup_fact = sb[0]
-                    sup_rule = sb[1]
-
-                    rs = rs + spaces + "    fact: " + sup_fact.statement.__str__()
-                    if sup_fact.asserted is True:
-                        rs = rs + " ASSERTED \n"
-                    else:
-                        rs += "\n"
-                    new_counter = counter + 1
-                    rs += self.kb_supports(sup_fact, new_counter)
-
-                    lhsstring = self.kb_print_rule(sup_rule.lhs)
-                    rs = rs + spaces + "    rule: " + lhsstring + " -> " + sup_rule.rhs.__str__()
-                    if sup_rule.asserted is True:
-                        rs = rs + " ASSERTED \n"
-                    else:
-                        rs += "\n"
-                    new_counter = counter + 1
-                    rs += self.kb_supports(sup_rule, new_counter)
-
+                new_counter = counter + 1
+                rs += self.kb_supports(sup_fact, new_counter)
+                rs += self.kb_supports(sup_rule, new_counter)
         return rs
 
-    def kb_print_rule(self, rule_lhs):
-        lhs_string = "("
-        for i in rule_lhs:
-
-            lhs_string += i.__str__() + ", "
-        lhs_string = lhs_string.strip(", ")
-        lhs_string += ")"
-
+    def kb_print_rule(self, rule):
+        lhs_string = "rule: ("
+        for i in rule.lhs:
+            lhs_string += i.__str__()
+            if i != rule.lhs[len(rule.lhs)-1]:
+                lhs_string += ", "
+        lhs_string += ") -> " + rule.rhs.__str__()
         return lhs_string
 
 
