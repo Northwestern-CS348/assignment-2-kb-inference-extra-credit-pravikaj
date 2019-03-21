@@ -1,18 +1,6 @@
 TESTS WITH ERRORS 
 -------------------------------
 TESTS FAILED  
-test03 (gradingtests.UnitTests)
-Traceback (most recent call last):
-  File "/Users/k2i/academics/automatedgradingapp/app/testing/kb-inference-ec/gradingtests.py", line 73, in test03
-    self.compare(self.KB.kb_explain(fact4), answer1)
-  File "/Users/k2i/academics/automatedgradingapp/app/testing/kb-inference-ec/gradingtests.py", line 18, in compare
-    '"{0}" ({1} lead spaces)'.format(a, len(a) - len(a.strip())))
-AssertionError: '"  SUPPORTED BY " (2 lead spaces)' != '"  SUPPORTED BY" (2 lead spaces)'
-- "  SUPPORTED BY " (2 lead spaces)
-?                -
-+ "  SUPPORTED BY" (2 lead spaces)
-
-
 -------------------------------
 TESTS SKIPPED 
 -------------------------------
